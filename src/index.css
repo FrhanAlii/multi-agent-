@@ -1,0 +1,254 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 17% 98%;
+    --foreground: 0 0% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 11%;
+
+    --primary: 153 48% 19%;
+    --primary-foreground: 0 0% 100%;
+
+    --primary-light: 153 38% 36%;
+    --primary-glow: 153 30% 48%;
+
+    --secondary: 210 17% 95%;
+    --secondary-foreground: 0 0% 11%;
+
+    --muted: 220 9% 46%;
+    --muted-foreground: 220 9% 46%;
+
+    --accent: 153 30% 48%;
+    --accent-foreground: 0 0% 100%;
+
+    --success: 152 36% 52%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 29 88% 67%;
+    --warning-foreground: 0 0% 11%;
+
+    --destructive: 355 78% 56%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 153 48% 19%;
+
+    --radius: 1rem;
+
+    --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
+    --shadow-elevated: 0 8px 30px rgba(0, 0, 0, 0.08);
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 11%;
+    --sidebar-primary: 153 48% 19%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 153 48% 19%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 153 48% 19%;
+  }
+
+  .dark {
+    --background: 0 0% 3%;
+    --foreground: 210 17% 95%;
+
+    --card: 0 0% 7%;
+    --card-foreground: 210 17% 95%;
+
+    --popover: 0 0% 7%;
+    --popover-foreground: 210 17% 95%;
+
+    --primary: 153 36% 52%;
+    --primary-foreground: 0 0% 100%;
+
+    --primary-light: 153 38% 36%;
+    --primary-glow: 153 30% 48%;
+
+    --secondary: 0 0% 11%;
+    --secondary-foreground: 210 17% 95%;
+
+    --muted: 220 15% 72%;
+    --muted-foreground: 220 15% 78%;
+
+    --accent: 153 30% 48%;
+    --accent-foreground: 0 0% 100%;
+
+    --success: 152 36% 52%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 29 88% 67%;
+    --warning-foreground: 0 0% 11%;
+
+    --destructive: 355 78% 46%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
+    --ring: 153 36% 52%;
+
+    --sidebar-background: 0 0% 5%;
+    --sidebar-foreground: 210 17% 95%;
+    --sidebar-primary: 153 36% 52%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 153 36% 52%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 14%;
+    --sidebar-ring: 153 36% 52%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer utilities {
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(153, 48%, 19%), hsl(153, 38%, 28%));
+  }
+
+  .gradient-primary-light {
+    background: linear-gradient(135deg, hsl(153, 38%, 36%), hsl(153, 30%, 48%));
+  }
+
+  .count-up {
+    animation: countUp 0.6s ease-out forwards;
+  }
+
+  @keyframes countUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .pill {
+    @apply rounded-full;
+  }
+
+  /* ── iOS 26 Liquid Glass (dark) — dark theme only ───────────── */
+
+  /* PRIMARY glass — chat area, topbar, message bubbles, cards */
+  .dark .glass {
+    background: linear-gradient(
+      145deg,
+      rgba(0, 0, 0, 0.52) 0%,
+      rgba(0, 0, 0, 0.40) 100%
+    );
+    backdrop-filter: blur(52px) saturate(180%);
+    -webkit-backdrop-filter: blur(52px) saturate(180%);
+    border-color: rgba(255, 255, 255, 0.10);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),  /* subtle specular rim */
+      inset 0 -0.5px 0 rgba(0, 0, 0, 0.30),     /* bottom edge depth */
+      0 24px 64px rgba(0, 0, 0, 0.45),           /* deep elevation */
+      0 8px 24px rgba(0, 0, 0, 0.28);            /* soft mid-shadow */
+    transition: background 0.35s ease, box-shadow 0.35s ease;
+  }
+
+  .dark .glass:hover {
+    background: linear-gradient(
+      145deg,
+      rgba(0, 0, 0, 0.58) 0%,
+      rgba(0, 0, 0, 0.46) 100%
+    );
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 -0.5px 0 rgba(0, 0, 0, 0.35),
+      0 28px 72px rgba(0, 0, 0, 0.50),
+      0 10px 28px rgba(0, 0, 0, 0.32);
+  }
+
+  /* SIDEBAR glass — tall element, vertical gradient */
+  .dark .glass-sidebar {
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0.45) 100%
+    );
+    backdrop-filter: blur(60px) saturate(180%);
+    -webkit-backdrop-filter: blur(60px) saturate(180%);
+    border-right-color: rgba(255, 255, 255, 0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.10),   /* top rim */
+      inset -0.5px 0 0 rgba(255, 255, 255, 0.06), /* right edge */
+      4px 0 40px rgba(0, 0, 0, 0.40);             /* lateral shadow */
+    transition: background 0.35s ease;
+  }
+
+  /* SUBTLE glass — input footer, buttons, chips */
+  .dark .glass-subtle {
+    background: rgba(0, 0, 0, 0.38);
+    backdrop-filter: blur(32px) saturate(160%);
+    -webkit-backdrop-filter: blur(32px) saturate(160%);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 8px 24px rgba(0, 0, 0, 0.28);
+    transition: background 0.35s ease, box-shadow 0.35s ease;
+  }
+
+  .dark .glass-subtle:hover {
+    background: rgba(0, 0, 0, 0.46);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      0 10px 28px rgba(0, 0, 0, 0.34);
+  }
+
+  /* Form controls nested inside glass panels */
+  .dark .glass input,
+  .dark .glass select,
+  .dark .glass textarea,
+  .dark .glass-subtle input,
+  .dark .glass-subtle select,
+  .dark .glass-subtle textarea {
+    background: rgba(0, 0, 0, 0.30) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+  }
+
+  .dark .glass input::placeholder,
+  .dark .glass textarea::placeholder,
+  .dark .glass-subtle input::placeholder,
+  .dark .glass-subtle textarea::placeholder {
+    color: rgba(255, 255, 255, 0.35) !important;
+  }
+
+  /* Select option dropdown stays readable in browser chrome */
+  .dark .glass select option,
+  .dark .glass-subtle select option {
+    background: #0a0a0a;
+    color: #ffffff;
+  }
+
+  /* Foreground text stays white on dark glass */
+  .dark .glass,
+  .dark .glass-sidebar,
+  .dark .glass-subtle {
+    color: rgba(255, 255, 255, 0.95);
+  }
+}
