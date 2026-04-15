@@ -1,4 +1,4 @@
-# OutreachAI
+# SmartB AI
 
 **OutreachAI** is an enterprise-grade, multi-agent business process automation platform. It combines a conversational AI interface with an intelligent backend that orchestrates specialized agents to handle document intake, compliance checking, data extraction, and automated outreach workflows — with human-in-the-loop approval gates at every critical step.
 
