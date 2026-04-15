@@ -72,62 +72,27 @@ export function useChat() {
     const apiMessages = [...messages, userMsg].map(m => ({ role: m.role, content: m.content }));
 
     try {
-      const resp = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`, {
+      const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
-          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
         },
-        body: JSON.stringify({ messages: apiMessages, conversation_id: convId }),
+        body: JSON.stringify({ message: input, session_id: convId }),
       });
 
       if (!resp.ok) {
         const errData = await resp.json().catch(() => ({ error: "Request failed" }));
-        throw new Error(errData.error || `HTTP ${resp.status}`);
+        throw new Error(errData.detail || errData.error || `HTTP ${resp.status}`);
       }
 
       setIsThinking(false);
-      if (!resp.body) throw new Error("No response body");
+      const data = await resp.json();
+      const assistantSoFar = data.response || "No response";
 
-      const reader = resp.body.getReader();
-      const decoder = new TextDecoder();
-      let textBuffer = "";
-      let assistantSoFar = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        textBuffer += decoder.decode(value, { stream: true });
-
-        let newlineIndex: number;
-        while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
-          let line = textBuffer.slice(0, newlineIndex);
-          textBuffer = textBuffer.slice(newlineIndex + 1);
-          if (line.endsWith("\r")) line = line.slice(0, -1);
-          if (line.startsWith(":") || line.trim() === "") continue;
-          if (!line.startsWith("data: ")) continue;
-          const jsonStr = line.slice(6).trim();
-          if (jsonStr === "[DONE]") break;
-          try {
-            const parsed = JSON.parse(jsonStr);
-            const content = parsed.choices?.[0]?.delta?.content;
-            if (content) {
-              assistantSoFar += content;
-              setMessages(prev => {
-                const last = prev[prev.length - 1];
-                if (last?.role === "assistant") {
-                  return prev.map((m, i) => i === prev.length - 1 ? { ...m, content: assistantSoFar } : m);
-                }
-                return [...prev, { role: "assistant", content: assistantSoFar, timestamp: new Date() }];
-              });
-            }
-          } catch {
-            textBuffer = line + "\n" + textBuffer;
-            break;
-          }
-        }
-      }
+      setMessages(prev => [
+        ...prev,
+        { role: "assistant", content: assistantSoFar, timestamp: new Date() }
+      ]);
 
       // Save assistant message
       if (convId && assistantSoFar) {
@@ -140,7 +105,7 @@ export function useChat() {
         await supabase.from("conversations").update({ last_message_at: new Date().toISOString() }).eq("id", convId);
       }
     } catch (e: any) {
-      toast({ title: "Error", description: e.message, variant: "destructive" });
+      toast({ title: "Error", description: e.message || "Failed to communicate with the backend", variant: "destructive" });
       setIsThinking(false);
     } finally {
       setIsLoading(false);
